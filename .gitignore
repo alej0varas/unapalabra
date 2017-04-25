@@ -2,3 +2,5 @@
 /database.db
 /geckodriver.log
 /rae_crawl.txt
+*~
+*.log
