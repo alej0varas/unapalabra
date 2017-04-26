@@ -1,4 +1,6 @@
+import multiprocessing
 import random
+import time
 
 from splinter import Browser
 from selenium.common.exceptions import TimeoutException, WebDriverException
@@ -30,9 +32,7 @@ def remove_proxy(proxy):
     print('remove:', proxy)
 
 
-while True:
-    proxy_string = get_proxy_string()
-    proxy = get_proxy(proxy_string)
+def target(url, proxy):
     try:
         with Browser('phantomjs', service_args=proxy) as browser:
             try:
@@ -46,3 +46,11 @@ while True:
                 remove_proxy(proxy_string)
     except OSError:
         pass
+    
+
+while True:
+    proxy_string = get_proxy_string()
+    proxy = get_proxy(proxy_string)
+    p = multiprocessing.Process(target=target, args=(url, proxy))
+    p.start()
+    time.sleep(10)
